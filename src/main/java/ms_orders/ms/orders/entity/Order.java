@@ -1,6 +1,7 @@
 package ms_orders.ms.orders.entity;
 
 import jakarta.persistence.*;
+import ms_orders.ms.orders.entity.embedded.OrderItem;
 import ms_orders.ms.orders.entity.enums.Status;
 
 import javax.validation.constraints.NotBlank;
@@ -37,14 +38,17 @@ public class Order {
     @Column(columnDefinition = "TIMESTAMP DEFAULT '2000-01-01 00:00:00'")
     private LocalDateTime timePublished;
     @ManyToOne
-    @Column(name = "customer_id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems;
 
     public Order() {
 
     }
 
-    public Order(Long id, String customerName, String customerPhone, Integer totalItens, Boolean published, Boolean paid, Status status, LocalDateTime createdAt, LocalDateTime lastModified, LocalDateTime timePublished, List<Product> products, Customer customer) {
+    public Order(Long id, String customerName, String customerPhone, Integer totalItens, Boolean published, Boolean paid, Status status, LocalDateTime createdAt, LocalDateTime lastModified, LocalDateTime timePublished, Customer customer) {
         this.id = id;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
@@ -55,7 +59,6 @@ public class Order {
         this.createdAt = createdAt;
         this.lastModified = lastModified;
         this.timePublished = timePublished;
-        this.products = products;
         this.customer = customer;
     }
 
@@ -137,14 +140,6 @@ public class Order {
 
     public void setTimePublished(LocalDateTime timePublished) {
         this.timePublished = timePublished;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
     }
 
     public Customer getCustomer() {
