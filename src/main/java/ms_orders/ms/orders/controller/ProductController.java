@@ -14,8 +14,9 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public void testeApi() {
+    public String testeApi() {
         Logger logger = Logger.getLogger("ms_orders.ms.orders.controller");
         logger.info("Request was a ok!");
+        return "Request 200OK!";
     }
 }
